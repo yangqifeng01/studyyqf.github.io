@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fd.dao.NewsMapper">
+    <select id="allNews" resultMap="newsUser">
+        select * from news n,user u where n.newsAddId = u.user_id order by n.state,newsId desc
+    </select>
+    <resultMap id="newsUser" type="News">
+        <result property="newsId" column="newsId"/>
+        <result property="newsTitle" column="newsTitle"/>
+        <result property="newsAuthor" column="newsAuthor"/>
+        <result property="newsAddDate" column="newsAddDate"/>
+        <result property="newsTypes" column="newsTypes"/>
+        <result property="newsContent" column="newsContent"/>
+        <result property="newsAddId" column="newsAddId"/>
+        <result property="newsImage" column="newsImage"/>
+        <result property="state" column="state"/>
+        <result property="checkMsg" column="checkMsg"/>
+        <association property="user" javaType="User">
+            <result property="userId" column="user_id"/>
+            <result property="userName" column="userName"/>
+        </association>
+    </resultMap>
+
+    <insert id="addNews" parameterType="News">
+        insert into news(newsTitle,newsAuthor,newsAddDate,newsTypes,newsContent,newsAddId,newsImage,state )
+        values(#{newsTitle},#{newsAuthor},#{newsAddDate},#{newsTypes},#{newsContent},#{newsAddId},#{newsImage},#{state})
+    </insert>
+
+    <select id="selectNewsByNewsId" parameterType="int" resultType="News">
+        select * from news where newsId = #{newsId}
+    </select>
+
+    <select id="selectNewsByNewsTitle" parameterType="String" resultType="News">
+        select * from news where newsTitle=#{newsTitle}
+    </select>
+
+    <delete id="deleteNews" parameterType="String">
+        delete from news where newsTitle=#{newsTitle}
+    </delete>
+
+    <update id="updateNews" parameterType="News">
+        update news set newsTitle=#{newsTitle},newsAuthor=#{newsAuthor},newsTypes=#{newsTypes},
+        newsContent=#{newsContent},newsImage=#{newsImage},state=#{state} where newsId=#{newsId}
+    </update>
+
+    <select id="selectNewsByNewsTypes" resultType="News" parameterType="int">
+        select * from news where newsTypes=${newsTypes}
+    </select>
+
+    <update id="updateNewsState" parameterType="map">
+        update news set state=#{state},checkMsg=#{checkMsg} where newsId=#{newsId}
+    </update>
+
+    <select id="selectChecking" resultMap="newsUser">
+        select * from news where state &lt;&gt; 3
+    </select>
+</mapper>

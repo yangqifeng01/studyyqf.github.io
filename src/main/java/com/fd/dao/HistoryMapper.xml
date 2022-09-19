@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fd.dao.HistoryMapper">
+    <select id="allHistory" resultMap="HistoryAndUser">
+        select * from history h, user u where h.updateUserId = u.user_id
+    </select>
+    <resultMap id="HistoryAndUser" type="History">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="introduction" column="introduction"/>
+        <result property="content" column="content"/>
+        <result property="updateDate" column="updateDate"/>
+        <result property="image" column="image"/>
+        <result property="updateUserId" column="updateUserId"/>
+        <association property="user" javaType="User">
+            <result property="userName" column="userName"/>
+        </association>
+    </resultMap>
+
+    <update id="updateHistory" parameterType="History">
+        update history set title=#{title},introduction=#{introduction},content=#{content},
+        updateDate=#{updateDate},image=#{image},updateUserId=#{updateUserId}
+    </update>
+
+    <select id="selectHistoryById" parameterType="int" resultMap="HistoryAndUser">
+        select * from history h,user u where h.updateUserId = u.user_id and h.id = #{id}
+    </select>
+</mapper>

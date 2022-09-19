@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<!-- 开启LOG4J日志 -->
+		<setting name="logImpl" value="LOG4J"/>
+		<!-- 开启驼峰命名法 -->
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+	</settings>
+
+    <typeAliases>
+        <typeAlias alias="User" type="com.fd.model.User"/>
+        <typeAlias alias="Comment" type="com.fd.model.Comment"/>
+        <typeAlias alias="Scenery" type="com.fd.model.Scenery"/>
+        <typeAlias alias="Food" type="com.fd.model.Food"/>
+        <typeAlias alias="News" type="com.fd.model.News"/>
+        <typeAlias alias="Slideshow" type="com.fd.model.Slideshow"/>
+        <typeAlias alias="History" type="com.fd.model.History"/>
+        <typeAlias alias="Leave" type="com.fd.model.Leave" />
+	</typeAliases>
+
+    <mappers>
+        <mapper resource="com/fd/dao/UserMapper.xml" />
+        <mapper resource="com/fd/dao/CommentMapper.xml" />
+        <mapper resource="com/fd/dao/SceneryMapper.xml"/>
+        <mapper resource="com/fd/dao/FoodMapper.xml"/>
+        <mapper resource="com/fd/dao/NewsMapper.xml"/>
+        <mapper resource="com/fd/dao/SlideshowMapper.xml"/>
+        <mapper resource="com/fd/dao/HistoryMapper.xml"/>
+        <mapper resource="com/fd/dao/LeaveMapper.xml"/>
+    </mappers>
+    
+</configuration>

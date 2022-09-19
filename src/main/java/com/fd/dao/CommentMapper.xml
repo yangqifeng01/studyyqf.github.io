@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fd.dao.CommentMapper">
+	<select id="allComments" resultMap="comment">
+		select * from comment c,user u where u.user_id = c.user_id order by c.type asc ,good_count desc,
+		c.adddate desc
+	</select>
+	
+	<resultMap id="comment" type="Comment">
+		<result property="commentId" column="comment_id"/>
+		<result property="commentContent" column="comment_content"/>
+		<result property="userId" column="user_id"/>
+		<result property="aboutName" column="about_name"/>
+		<result property="type" column="type"/>
+		<result property="goodCount" column="good_count"/>
+		<result property="adddate" column="adddate"/>
+		<association property="user" javaType="User">
+			<result property="userId" column="user_id"/>
+			<result property="userName" column="userName"/>
+			<result property="headPro" column="headPro"/>
+		</association>
+	</resultMap>
+
+	<select id="selectCommentByIdAndType" resultMap="comment">
+		select * from comment c,user u where u.user_id = c.user_id and
+		type =#{type} and c.about_name=#{aboutName} order by good_count desc,c.adddate desc
+	</select>
+
+	<insert id="addComment" parameterType="Comment">
+		insert into comment(comment_content,user_id,about_name,type,adddate)
+		values (#{commentContent},#{userId},#{aboutName},#{type},#{adddate})
+	</insert>
+
+	<delete id="deleteComment" parameterType="int">
+		delete from comment where comment_id = #{commentId}
+	</delete>
+
+	<select id="selectCommentByUserId" parameterType="int" resultType="Comment">
+		select * from comment where user_id=#{userId} order by adddate desc
+	</select>
+	
+</mapper>

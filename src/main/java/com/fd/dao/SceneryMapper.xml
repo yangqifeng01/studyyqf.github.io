@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fd.dao.SceneryMapper">
+	<select id="allSceneries" resultMap="sceneryUser">
+		select * from scenery s,user u
+		where s.authorId = u.user_id order by s.state asc,s.id desc
+	</select>
+	<resultMap id="sceneryUser" type="Scenery">
+		<result property="id" column="id"/>
+		<result property="name" column="name"/>
+		<result property="address" column="address"/>
+		<result property="content" column="content"/>
+		<result property="addDate" column="addDate"/>
+		<result property="rates" column="rates"/>
+		<result property="openTime" column="openTime"/>
+		<result property="introduction" column="introduction"/>
+		<result property="authorId" column="authorId"/>
+		<result property="image" column="image"/>
+		<result property="state" column="state"/>
+		<result property="checkMsg" column="checkMsg"/>
+		<association property="user" javaType="User">
+			<result property="userId" column="user_id"/>
+			<result property="userName" column="userName"/>
+		</association>
+	</resultMap>
+
+	<select id="selectSceneryByName" resultType="Scenery">
+		select * from scenery where name = #{name}
+	</select>
+
+	<select id="selectSceneryById" resultType="Scenery">
+		select * from scenery where id = ${id}
+	</select>
+	
+	<insert id="addScenery" parameterType="Scenery">
+		insert into scenery(name,address,content,authorId,addDate,rates,openTime,introduction,image,state)
+		values(#{name},#{address},#{content},#{authorId},#{addDate},#{rates},#{openTime},#{introduction},#{image},#{state})
+	</insert>
+
+	<delete id="deleteScenery">
+		delete from scenery where name = #{name}
+	</delete>
+
+	<update id="updateScenery" parameterType="Scenery">
+		update scenery set name=#{name},address=#{address},content=#{content},rates=#{rates},
+		openTime=#{openTime},introduction=#{introduction},image=#{image},state=#{state} where id=#{id}
+	</update>
+
+	<update id="upSceneryState" parameterType="map">
+		update scenery set state=#{state},checkMsg=#{checkMsg} where id=#{id}
+	</update>
+
+	<select id="selectChecking" resultMap="sceneryUser">
+		select * from scenery where state &lt;&gt; 3
+	</select>
+
+</mapper>
