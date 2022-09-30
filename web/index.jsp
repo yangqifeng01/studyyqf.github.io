@@ -117,22 +117,37 @@
     <%--登录框--%>
     <div id="container">
         <div style="width: 600px;height: 40px;"><label style="float: right;font-size: 30px;background-color: #FFFFFF;text-align: center;color: #99a2aa;font-weight: 100;margin-right: 10px" onclick="Closed()">×</label></div>
-        <div style="width: 600px;height: 50px;text-align: center;"><label style="font-size: 38px">用户登录</label></div>
+        <div style="width: 600px;height: 50px;text-align: center;"><label style="font-size: 20px" onclick="showlogin()">用户登录</label> &nbsp;&nbsp; <label style="font-size: 20px" onclick="showRegister()">用户注册</label></div>
         <div style="width: 380px;height: 83px;border: #e7e7e7 1px solid;border-radius: 10px;margin-left: 110px;margin-top: 10px">
-            <div style="width: 380px;height: 30px;text-align: center;padding-top: 5px">
-                <span style="width: 50px;height: 35px;display: inline-block;"><label style="font-size: 13px;">用户名 </label></span>
-                <input type="text" style="height: 35px;width: 250px;outline: none;border: 0" placeholder="请输入用户名" id="userName">
+            <div id="login">
+                <div style="width: 380px;height: 30px;text-align: center;padding-top: 5px">
+                    <span style="width: 50px;height: 35px;display: inline-block;"><label style="font-size: 13px;">用户名 </label></span>
+                    <input type="text" style="height: 35px;width: 250px;outline: none;border: 0" placeholder="请输入用户名" id="loginUserName">
+                </div>
+                <hr style="height: 1px;width: 380px;background:#e7e7e7;border: 0">
+                <div style="width: 310px;height: 30px;text-align: center;">
+                    <span style="width: 50px;height: 30px;display: inline-block;"><label style="font-size: 13px;">密 码 </label></span>
+                    <input type="password" style="height: 30px;width: 185px;outline: none;border: 0" placeholder="请输入密码" id="loginPassword">
+                </div>
+                <div style="width: 380px;height: 35px;margin-top: 20px">
+                    <span><button class="btn2" onclick="showRegister()">注册</button></span>
+                    &nbsp;&nbsp;&nbsp;
+                    <span><button  class="btn3" onclick="login()">登录</button></span>
+                </div>
             </div>
-            <hr style="height: 1px;width: 380px;background:#e7e7e7;border: 0">
-            <div style="width: 380px;height: 30px;text-align: center;">
-                <span style="width: 50px;height: 30px;display: inline-block;"><label style="font-size: 13px;">密码 </label></span>
-                <input type="password" style="height: 30px;width: 185px;outline: none;border: 0" placeholder="请输入密码" id="password">
-                <label style="color: #17a9da">忘记密码？</label>
-            </div>
-            <div style="width: 380px;height: 35px;margin-top: 20px">
-                <span><button class="btn2">注册</button></span>
-                &nbsp;&nbsp;&nbsp;
-                <span><button  class="btn3" onclick="login()">登录</button></span>
+            <div id="register" style="display: none">
+                <div style="width: 380px;height: 30px;text-align: center;padding-top: 5px">
+                    <span style="width: 50px;height: 35px;display: inline-block;"><label style="font-size: 13px;">用户名 </label></span>
+                    <input type="text" style="height: 35px;width: 250px;outline: none;border: 0" placeholder="请输入用户名" id="RegUserName">
+                </div>
+                <hr style="height: 1px;width: 380px;background:#e7e7e7;border: 0">
+                <div style="width: 310px;height: 30px;text-align: center;">
+                    <span style="width: 50px;height: 30px;display: inline-block;"><label style="font-size: 13px;">密 码 </label></span>
+                    <input type="password" style="height: 30px;width: 185px;outline: none;border: 0" placeholder="请输入密码" id="RegPassword">
+                </div>
+                <div style="width: 380px;height: 35px;margin-top: 20px;margin-left: 100px">
+                    <span><button class="btn3" onclick="register()">注册</button></span>
+                </div>
             </div>
         </div>
     </div>
@@ -146,8 +161,8 @@
 </div>
 <!--footer 结束-->
 <%--提示信息--%>
-<script src="<%=basePath%>/admin/assets/js/message.min.js"></script>
-<script src="<%=basePath%>/admin/assets/js/bootbox.min.js"></script>
+<script src="/admin/assets/js/message.min.js"></script>
+<script src="/admin/assets/js/bootbox.min.js"></script>
 <script>
     $(function (){
         if(window.history.replaceState){
@@ -185,8 +200,8 @@
     }
 
     function login(){
-        let userName = document.getElementById("userName").value;
-        let password = document.getElementById("password").value;
+        let userName = document.getElementById("loginUserName").value;
+        let password = document.getElementById("loginPassword").value;
         let data = {"userName":userName,"password":password};
         $.ajax({
             dataType:"json",
@@ -205,7 +220,39 @@
         })
     }
 
+    function register(){
+        let userName = document.getElementById("RegUserName").value;
+        let password = document.getElementById("RegPassword").value;
+        let data = {"userName":userName,"password":password};
+        $.ajax({
+            dataType:"json",
+            url:"${pageContext.request.contextPath}/userReg",
+            data:data,
+            type:"post",
+            success:function (data) {
+                console.log(data);
+                if(data !== false){
+                    //关闭注册
+                    showlogin();
+                }else {
+                    Qmsg.error("该用户名已存在");
+                }
+            }
+        })
+    }
 
+    function showlogin(){
+        let login = document.getElementById("login");
+        let register = document.getElementById("register");
+        login.style.display = "";
+        register.style.display = "none";
+    }
+    function showRegister(){
+        let login = document.getElementById("login");
+        let register = document.getElementById("register");
+        login.style.display = "none";
+        register.style.display = "";
+    }
 </script>
 </body>
 

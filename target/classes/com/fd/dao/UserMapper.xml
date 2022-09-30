@@ -4,7 +4,7 @@
 <mapper namespace="com.fd.dao.UserMapper">
     <!-- 判断是否存在指定学生 -->
     <select id="login" parameterType="User" resultType="User">
-        select * from user WHERE userName=#{userName} and password=#{password}
+        select * from user where userName=#{userName} and password=#{password}
     </select>
     
     <select id="allUsers" resultType="User">
@@ -12,8 +12,28 @@
     </select>
     
     <insert id="addUser" parameterType="User">
-    	insert into user(userName,password,email,sex,state,status,addDate,headPro)
-    	values(#{userName},#{password},#{email},#{sex},1,#{status},#{addDate},#{headPro})
+    	insert into user
+    	    <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="userName != null">userName, </if>
+    	        <if test="password != null">password,</if>
+    	        <if test="email != null">email,</if>
+    	        <if test="sex != 0">sex,</if>
+    	        state
+    	        <if test="status != 0"> status,</if>
+    	        <if test="addDate != null"> addDate,</if>
+    	        <if test="headPro != null"> headPro</if>
+            </trim>
+    	values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userName != null">#{userName}, </if>
+            <if test="password != null">#{password},</if>
+            <if test="email != null">#{email},</if>
+            <if test="sex != 0">#{sex},</if>
+             1,
+            <if test="status != 0"> #{status},</if>
+            <if test="addDate != null"> #{addDate},</if>
+            <if test="headPro != null"> #{headPro}</if>
+        </trim>
     </insert>
     
     <select id="searchUser" resultType="User">
@@ -29,8 +49,19 @@
     </delete>
     
     <update id="updateUser" parameterType="User">
-    	update user set userName=#{userName},password=#{password},email=#{email},sex=#{sex},
-    	state=#{state},status=#{status},headPro=#{headPro} where user_id=#{userId}
+    	update user
+    	<trim prefix="set" suffixOverrides=",">
+            <if test="userName != null">userName = #{userName},</if>
+            <if test="password != null">password=#{password},</if>
+            <if test="email != null">email=#{email},</if>
+            <if test="sex != null">sex=#{sex},</if>
+            <if test="state != null">state=#{state},</if>
+            <if test="status != null">status=#{status},</if>
+            <if test="headPro != null">headPro=#{headPro},</if>
+            <if test="status != null">status=#{status},</if>
+        </trim>
+    	where
+    	<if test="user_id != null">user_id=#{userId}</if>
     </update>
     
 </mapper>

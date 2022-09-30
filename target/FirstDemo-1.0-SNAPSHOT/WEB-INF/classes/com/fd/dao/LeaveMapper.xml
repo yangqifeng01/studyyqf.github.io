@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fd.dao.LeaveMapper">
+    <insert id="addLeave" parameterType="Leave">
+        insert into leave_comment(leave_name,leave_phone,leave_sex,leave_content,leave_date)
+        values (#{leaveName},#{leavePhone},#{leaveSex},#{leaveContent},#{leaveDate})
+    </insert>
+
+    <select id="leaveList" resultType="Leave">
+        select * from leave_comment
+    </select>
+
+     <delete id="delete" parameterType="int">
+         delete from leave_comment where id=#{id}
+     </delete>
+
+</mapper>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- org.hnist.dao.TeacherMapper对应的接口 -->
+<mapper namespace="com.fd.dao.UserMapper">
+    <!-- 判断是否存在指定学生 -->
+    <select id="login" parameterType="User" resultType="User">
+        select * from user where userName=#{userName} and password=#{password}
+    </select>
+    
+    <select id="allUsers" resultType="User">
+    	select * from user
+    </select>
+    
+    <insert id="addUser" parameterType="User">
+    	insert into user
+    	    <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="userName != null">userName, </if>
+    	        <if test="password != null">password,</if>
+    	        <if test="email != null">email,</if>
+    	        <if test="sex != 0">sex,</if>
+    	        state
+    	        <if test="status != 0"> status,</if>
+    	        <if test="addDate != null"> addDate,</if>
+    	        <if test="headPro != null"> headPro</if>
+            </trim>
+    	values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userName != null">#{userName}, </if>
+            <if test="password != null">#{password},</if>
+            <if test="email != null">#{email},</if>
+            <if test="sex != 0">#{sex},</if>
+             1,
+            <if test="status != 0"> #{status},</if>
+            <if test="addDate != null"> #{addDate},</if>
+            <if test="headPro != null"> #{headPro}</if>
+        </trim>
+    </insert>
+    
+    <select id="searchUser" resultType="User">
+    	select * from user where user_id=#{userId}
+    </select>
+    
+    <select id="searchUserByName" resultType="User">
+    	select * from user where userName=#{userName}
+    </select>
+    
+    <delete id="deleteUser" parameterType="int">
+    	delete from user where user_id=#{userId}
+    </delete>
+    
+    <update id="updateUser" parameterType="User">
+    	update user
+    	<trim prefix="set" suffixOverrides=",">
+            <if test="userName != null">userName = #{userName},</if>
+            <if test="password != null">password=#{password},</if>
+            <if test="email != null">email=#{email},</if>
+            <if test="sex != null">sex=#{sex},</if>
+            <if test="state != null">state=#{state},</if>
+            <if test="status != null">status=#{status},</if>
+            <if test="headPro != null">headPro=#{headPro},</if>
+            <if test="status != null">status=#{status},</if>
+        </trim>
+    	where
+    	<if test="user_id != null">user_id=#{userId}</if>
+    </update>
+    
+</mapper>

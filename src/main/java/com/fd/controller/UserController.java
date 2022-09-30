@@ -24,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 @Controller
-@RequestMapping("")
+@RequestMapping
 public class UserController {
 
 	@Resource
@@ -43,7 +43,7 @@ public class UserController {
 		}
 		return "2";//登录失败
 	}
-	//前台登录
+	//前端登录
 	@RequestMapping(value = "/userLogin",method = RequestMethod.POST)
 	@ResponseBody
 	public String userLogin(User user,HttpSession session) throws JsonProcessingException {
@@ -56,6 +56,19 @@ public class UserController {
 		}
 		return "false";
 	}
+	//前端注册
+	@RequestMapping(value = "/userReg",method = RequestMethod.POST)
+	@ResponseBody
+	public String userReg(User user,HttpSession session) throws JsonProcessingException {
+		System.out.println(user);
+		User user2 = userService.searchUserByName(user.getUserName());
+		if(user2 == null){
+			if(userService.addUser(user) > 0){
+				return "true";
+			}
+		}
+		return "false";
+	}
 
 	//退出登录
 	@RequestMapping(value = "/admin/exit")
@@ -64,12 +77,13 @@ public class UserController {
 			session.removeAttribute("normalUser");
 			return "/fakeIndex";
 		}
-
 		if(session.getAttribute("user") != null){
 			session.removeAttribute("user");
 		}
 		return "/admin/login";
 	}
+
+
 
 	@RequestMapping("/admin/userList")
 	public String allUsers(Model model, HttpSession session) {
